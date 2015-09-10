@@ -1,0 +1,23 @@
+year: Year
+doy: Day of Year
+tsec: GPS time of the day, in seconds
+rec: Receiver ID
+prn: Satellite pseudo-random noise sequence
+ele: Elevation on the horizon (degrees)
+xrec: x coordinate of GNSS receiver (ITRF-05) in metres
+yrec: y coordinate of GNSS receiver (ITRF-05) in metres
+zrec: z coordinate of GNSS receiver (ITRF-05) in metres
+xtra: x coordinate of GNSS transmitter (ITRF-05) in metres
+ytra: y coordinate of GNSS transmitter (ITRF-05) in metres
+ztra: z coordinate of GNSS transmitter (ITRF-05) in metres
+year_elemax: Year of dSTEC reference observation (at higher elevation in the continuous arc of phase data)
+doy_elemax: Day of year of dSTEC reference observation (at higher elevation in the continuous arc of phase data)
+tesec_elemax: GPS time of the day, in seconds
+elemax: Elevation of reference (higher elevation...) ray, in degrees
+xtra_elemax: x coordinate of GNSS transmitter (ITRF-05) corresponding to the ref. Ray, in meters
+ytra_elemax: y coordinate of GNSS transmitter (ITRF-05) corresponding to the ref. Ray, in meters
+ztra_elemax: z coordinate of GNSS transmitter (ITRF-05) corresponding to the ref. Ray, in meters
+dSTEC_obs: Ionospheric truth: observed STEC, referred (minus) to the STEC observed in the reference ray / TECUs
+iaac: IGS Ionospheric Associate Analysis Center id
+dSTEC_iaac: Modelled value for dSTEC_obs, given by Ionospheric center 'iaac'
+const: GNSS Constellation ("G" for GPS, "R" for Glonass, "E" for Galileo")

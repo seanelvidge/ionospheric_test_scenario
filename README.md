@@ -18,3 +18,5 @@ We will then ask the model owners to provide the electron density profile above 
 
 `download_truth_data.py` will download the truth/observation data used in the test scenario.
 
+## dSTEC data
+The `dSTEC data` folder contains the daily differential slant TEC data provided by Manuel Hernández-Pajares at UPC. The format of this ASCII file is also included (in `format.txt`).
