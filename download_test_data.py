@@ -47,7 +47,7 @@ def download_test_scenario(location=None):
     enddate = dt.datetime(2009,1,7)
     
     iono_stationlist = ['RL052', 'JR055', 'PQ052']    
-    gps_stationlist = ['bor1','brus','gope','helg','hert','obec','opmt','pots',
+    gps_stationlist = ['bor1','brus','gope','helg','hert','opmt','pots',
                    'ptbb','wroc','wsr2t','zimm']
     
     # Check download location exists. If not try and create it.
