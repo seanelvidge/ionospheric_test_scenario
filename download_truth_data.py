@@ -33,37 +33,37 @@ def download_test_scenario_truth(location=None):
     Modification History
     -------
     Created on May 2015 by Sean at SERENE, University of Birmingham
+    20/02/16   SE   Updated routines to check for existing downloaded files
+                    before attempting to download a repeat.
     Contact: s.elvidge@bham.ac.uk
     """
     import os
     import datetime as dt
     import ftplib
     
-    # Get current directory
+    # Get the current directory. We return here at the end
     curdir = os.getcwd()
+    if location == None:
+        location = curdir
+    else:
+        # Check location exists. If not try and create it.
+        if os.path.isdir(location) == False:
+            print('%s does not exist, trying to create.' %location)
+            os.mkdir(location)
+            if os.path.isdir(location) == False:
+                # Failed to create directory
+                print('Failed to create %s' %location)   
+                return -1
     
-    if location == None: location=curdir    
     startdate = dt.datetime(2008,12,8)
     enddate = dt.datetime(2009,1,7)
-    
-    iono_stationlist = ['DB049']    
-    gps_stationlist = ['redu']
-    
-    # Check download location exists. If not try and create it.
-    if os.path.isdir(location) == False:
-        print 'Required location does not exist, trying to create.'
-        os.mkdir(location)
-        if os.path.isdir(location) == False:
-            print 'Required location does not exist. Exiting.'
-            return -1
-    
-    
+     
     """ Download GPS files """
     print 'Downloading GPS files'
     # Make folder for GPS files
-    path = os.path.join(location,'gps')
-    if not os.path.isdir(path): os.mkdir(path)
-    os.chdir(path)
+    downloadpath = os.path.join(location,'redu')
+    if not os.path.isdir(downloadpath): os.mkdir(downloadpath)
+    os.chdir(downloadpath)
     
     # Connect to FTP server
     try:
@@ -83,37 +83,39 @@ def download_test_scenario_truth(location=None):
     # Loop through required dates
     for date in [startdate + dt.timedelta(n) for n in range(day_count)]:
         conn.cwd(str(date.year) + '/' + str(date.timetuple().tm_yday).zfill(3))
-        for station in gps_stationlist:
-            # Get list of matching files
-            filelist = conn.nlst('./' + station.lower() + '*')
-            # Loop through required stations and download
-            for file in filelist:
+        station = 'redu'
+        # Get list of matching files
+        filelist = conn.nlst('./' + station.lower() + '*')
+        # Loop through required stations and download
+        for file in filelist:
+            # Check if file already exists or not
+            if not os.path.isfile(os.path.join(downloadpath,file)):
                 print ('Downloading station %s data for %s...' 
                        %(station, date.strftime('%Y-%m-%d')))
-                downloadpath = os.path.join(path, date.strftime('%Y-%m-%d'))
-                # Create dir if it doesn't exist
-                if not os.path.isdir(downloadpath): os.makedirs(downloadpath)
                 rSize = conn.size(file)
                 lFile = open(os.path.join(downloadpath,file), 'wb')
                 conn.retrbinary('RETR %s' %file, lFile.write)
                 lSize = lFile.tell()
                 lFile.close()
                 if rSize == lSize:
-                    print 'Transfer complete'
+                    print('Transfer complete')
                 else:
-                    print 'Bad transfer', rSize, lSize
-                                                            
+                    print('Bad transfer, there is a mismatch ' +
+                                    'in sizes. On the FTP server %s has '+
+                                    'size %s, the downloaded file has '+
+                                    'size %s' %(file, rSize, lSize))
         conn.cwd('../../')
     conn.quit()
     os.chdir(curdir)
+    
     print '***************************'
     
     """ Download SAO files """
     print 'Downloading SAO files'
     # Make folder for SAO files
-    path = os.path.join(location,'sao')
-    if not os.path.isdir(path): os.mkdir(path)
-    os.chdir(path)
+    downloadpath = location
+    if not os.path.isdir(downloadpath): os.mkdir(downloadpath)
+    os.chdir(downloadpath)
     
     # Connect to FTP server
     try:
@@ -125,33 +127,34 @@ def download_test_scenario_truth(location=None):
     
     print 'Connecting to the NOAA FTP server to retreive data.'
     
-    for station in iono_stationlist: 
-        path = os.path.join(os.curdir, station)
-        if not os.path.isdir(path): os.mkdir(path)
-        for date in [startdate + dt.timedelta(n) for n in range(day_count)]:
-                rpath = ('/ionosonde/data/' + station + '/individual/' + 
-                        str(date.year) + '/' + 
-                        str(date.timetuple().tm_yday).zfill(3) + '/scaled')
-                print rpath
-                conn.cwd(rpath)    
-                filelist = conn.nlst('*.SAO')
-                print ('Downloading ionosonde %s data for %s...' 
+    station = 'DB049'
+    path = os.path.join(os.curdir, station)
+    if not os.path.isdir(path): os.mkdir(path)
+    for date in [startdate + dt.timedelta(n) for n in range(day_count)]:
+            rpath = ('/ionosonde/data/' + station + '/individual/' + 
+                    str(date.year) + '/' + 
+                    str(date.timetuple().tm_yday).zfill(3) + '/scaled')
+            print rpath
+            conn.cwd(rpath)    
+            filelist = conn.nlst('*.SAO')
+            print('Downloading/checking ionosonde %s data for %s...' 
                             %(station, date.strftime('%Y-%m-%d')))
-                for file in filelist:
+            for file in filelist:
+                if not os.path.isfile(os.path.join(path,file)):
                     rSize = conn.size(file)
                     lFile = open(os.path.join(path,file),'wb')
                     conn.retrbinary('RETR %s' %file, lFile.write)
                     lSize = lFile.tell()
                     lFile.close()
                     if rSize != lSize:
-                        print 'Bad transfer of %s' %file
-        
-
+                        print('Bad transfer, there is a mismatch ' +
+                                    'in sizes. On the FTP server %s has '+
+                                    'size %s, the downloaded file has '+
+                                    'size %s' %(file, rSize, lSize))
 	
     conn.quit()
     os.chdir(curdir)
-    
     print 'Downloads complete.'
     
 if __name__ == "__main__":
-    download_test_scenario_truth()
+    download_test_scenario_truth('C:\\Users\\Sean\\Documents\\EDAM_testing\\truth')

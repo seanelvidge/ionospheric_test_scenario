@@ -199,5 +199,5 @@ def download_ionosonde(location=None):
     print 'Ionosonde download script complete.'
     
 if __name__ == "__main__":
-#    download_gps(location='C:\Users\Sean\Documents\EDAM_testing')
-    download_ionosonde(location='C:\Users\Sean\Documents\EDAM_testing')
+    download_gps()
+    download_ionosonde()
