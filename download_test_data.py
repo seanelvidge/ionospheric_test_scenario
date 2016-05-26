@@ -58,7 +58,7 @@ def download_gps(location=None):
     enddate = dt.datetime(2009,1,7)
        
     gps_stationlist = ['bor1','brus','gope','helg','hert','opmt','pots',
-                   'ptbb','wroc','wsr2t','zimm']
+                   'ptbb','wroc','wsrt','zimm']
     
     # Make folder for GPS files
     path = os.path.join(location,'gps')

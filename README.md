@@ -9,7 +9,7 @@ Date: Dec 8th 2008 - Jan 7th 2009
 
 Ionosonde stations to assimilate (if applicable): RL052, JR055, PQ052 .
 
-GPS receivers to assimilate (if applicable): bor1, brus, gope, helg, hert, obec, opmt, pots, ptbb, wroc, wsr2t, zimm.
+GPS receivers to assimilate (if applicable): bor1, brus, gope, helg, hert, obec, opmt, pots, ptbb, wroc, wsrt, zimm.
 
 We will then ask the model owners to provide the electron density profile above DB049 (lat: 50.1, lon: 4.6) and differential slant TEC values for a set of given times and satellite positions (more details to be provided later).
 
